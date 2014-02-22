@@ -3,6 +3,7 @@ package twitter;
 import java.util.List;
 import java.util.Set;
 import java.util.Date;
+import java.util.HashSet;
 
 /**
  * Extract consists of methods that extract information from a list of tweets.
@@ -51,8 +52,27 @@ public class Extract {
      *         set.
      */
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
-        System.out.println(tweets);
-        throw new RuntimeException("not implemented");
+        Set<String> mentionedUsers = new HashSet<String>();
+        
+        for(int x = 0; x < tweets.size(); x++){
+            String curText = tweets.get(x).getText();
+          
+            while(curText.contains("@")){
+                String user;
+                
+                int start = curText.indexOf("@");
+                int end = curText.indexOf(" ", start);
+                if(end >= 0){
+                    user = curText.substring(start, end);
+                }else{ // end == -1, mention was at the end of tweet (no space after username)
+                    user = curText.substring(start);
+                }
+                
+                mentionedUsers.add(user.toLowerCase());
+            }
+        }
+        
+        return mentionedUsers;
     }
-
+    
 }
