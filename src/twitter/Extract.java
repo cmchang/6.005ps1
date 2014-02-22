@@ -51,6 +51,7 @@ public class Extract {
      *         set.
      */
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
+        System.out.println(tweets);
         throw new RuntimeException("not implemented");
     }
 
