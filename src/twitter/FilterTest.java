@@ -20,7 +20,13 @@ import org.junit.Test;
  * For the inTimespan method, I will be testing:
  *      - number of tweets contained in the given timespan (0, 1, >1)
  *      - tweets in list that are not in timespan (before and after)
- *        
+ * 
+ * For the containing method, I will be testing:
+ *      - words not in the tweets
+ *      - words in the tweets:
+ *          - =1, >1
+ *      - words in and not in tweets
+ *      - case insensitive
  */
 
 public class FilterTest {
@@ -28,10 +34,12 @@ public class FilterTest {
     private static Date d1;
     private static Date d2;
     private static Date d3;
+    private static Date d4;
     
     private static Tweet tweet1;
     private static Tweet tweet2;
     private static Tweet tweet3;
+    private static Tweet tweet4;
     
     @BeforeClass
     public static void setUpBeforeClass() {
@@ -46,9 +54,13 @@ public class FilterTest {
         calendar.set(2014, 1, 14, 15, 00, 00);
         d3 = calendar.getTime();
         
+        calendar.set(2014, 1, 14, 15, 00, 00);
+        d4 = calendar.getTime();
+        
         tweet1 = new Tweet(0, "alyssa", "is it reasonable to talk about rivest so much?", d1);
         tweet2 = new Tweet(1, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
-        tweet3 = new Tweet(2, "AlySsa", "text", d3);
+        tweet3 = new Tweet(2, "AlySsa", "text tALk", d3);
+        tweet4 = new Tweet(2, "AlySsa", "text talK", d3);
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,12 +176,27 @@ public class FilterTest {
     //  Tests for containing Method
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     
-    @Test
-    public void testContaining() {
-        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2), Arrays.asList("talk"));
+    @Test   // word contained in multiple tweets, varied upper/lowercases
+    public void testContainingWordInTwts() {
+        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2, tweet3, tweet4), Arrays.asList("talk"));
         
         assertFalse(containing.isEmpty());
-        assertTrue(containing.containsAll(Arrays.asList(tweet1, tweet2)));
+        assertTrue(containing.containsAll(Arrays.asList(tweet1, tweet2, tweet3, tweet4)));
     }
 
+    @Test   // word not contained in tweets
+    public void testContainingWordNotInTwts() {
+        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2), Arrays.asList("helloworld"));
+        
+        assertTrue(containing.isEmpty());
+        assertFalse(containing.containsAll(Arrays.asList(tweet1, tweet2)));
+    }
+    
+    @Test   // word contained in multiple tweets, varied upper/lowercases
+    public void testContainingWordInAndNotInTwts() {
+        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2, tweet3, tweet4), Arrays.asList("talk", "helloworld"));
+        
+        assertTrue(containing.isEmpty());
+        assertFalse(containing.containsAll(Arrays.asList(tweet1, tweet2, tweet3, tweet4)));
+    }
 }

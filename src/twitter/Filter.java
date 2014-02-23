@@ -72,7 +72,20 @@ public class Filter {
      *         "Obama" is the same as "obama".
      */
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> twtsWithWords = new ArrayList<Tweet>();
+        boolean wordIsContained;
+        for(Tweet tweet: tweets){
+            wordIsContained = true;
+            for(String word:words){
+                if(!tweet.getText().toLowerCase().contains(word.toLowerCase())){
+                    wordIsContained = false;
+                }
+            }
+            if(wordIsContained){
+                twtsWithWords.add(tweet);
+            }
+        }
+        return twtsWithWords;
     }
 
 }
