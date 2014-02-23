@@ -1,6 +1,7 @@
 package twitter;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Filter consists of methods that filter a list of tweets for those matching a condition.
@@ -23,7 +24,15 @@ public class Filter {
      *         equivalent.
      */
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> tweetsByUser = new ArrayList<Tweet>();
+        
+        for (int x = 0; x < tweets.size(); x++){
+            Tweet curTwt = tweets.get(x);
+            if(username.toLowerCase().equals(curTwt.getAuthor().toLowerCase())){
+                tweetsByUser.add(curTwt);
+            }
+        }
+        return tweetsByUser;
     }
 
     /**

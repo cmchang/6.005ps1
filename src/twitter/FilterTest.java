@@ -11,7 +11,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /*
- * TODO: your testing strategies for these methods should go here
+ * For the writtenBy method, I will be testing:
+ *      - no tweets made by desired user
+ *      - varying sizes of tweets list (1, >1)
+ *      - multiple tweets made by the desired user
+ *          - with varying upper/lowercase letters in the username
  */
 
 public class FilterTest {
@@ -41,8 +45,20 @@ public class FilterTest {
         tweet2 = new Tweet(1, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
         tweet3 = new Tweet(2, "AlySsa", "text", d3);
     }
-
-    @Test
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //  Tests for writtenBy Method
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    @Test   //None of the tweets are made by the desired user
+    public void testWrittenByMultipleNoTweets() {
+        List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweet1, tweet2, tweet3), "idontexist");
+        
+        assertTrue(writtenBy.isEmpty());
+        assertEquals(0, writtenBy.size());
+    }
+    
+    @Test   //exactly one tweet made by the desired user
     public void testWrittenByMultipleTweetsSingleResult() {
         List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweet1, tweet2), "alyssa");
         
@@ -50,6 +66,21 @@ public class FilterTest {
         assertEquals(1, writtenBy.size());
         assertTrue(writtenBy.contains(tweet1));
     }
+    
+    @Test //multiple tweets made by the desired user (username with varying lower/uppercases in different tweets)
+    public void testWrittenByMultipleTweetsSameUser() {
+        List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweet1, tweet2, tweet3), "alyssa");
+        System.out.println(writtenBy);
+        assertFalse(writtenBy.isEmpty());
+        assertEquals(2, writtenBy.size());
+        assertTrue(writtenBy.contains(tweet1));
+        assertTrue(writtenBy.contains(tweet3));
+
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //  Tests for inTimespan Method
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     
     @Test
     public void testInTimespanMultipleTweetsMultipleResults() {
@@ -65,6 +96,10 @@ public class FilterTest {
         assertFalse(inTimespan.isEmpty());
         assertTrue(inTimespan.containsAll(Arrays.asList(tweet1, tweet2)));
     }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //  Tests for containing Method
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     
     @Test
     public void testContaining() {
