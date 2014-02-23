@@ -2,7 +2,7 @@ package twitter;
 
 import java.util.List;
 import java.util.ArrayList;
-
+import java.util.Date;
 /**
  * Filter consists of methods that filter a list of tweets for those matching a condition.
  * 
@@ -45,7 +45,16 @@ public class Filter {
      * @return all tweets in the list that were sent during the timespan.
      */
     public static List<Tweet> inTimespan(List<Tweet> tweets, Timespan timespan) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> timespanTwts = new ArrayList<Tweet>();
+        Date start = timespan.getStart();
+        Date end = timespan.getEnd();
+        for(Tweet tweet: tweets){
+            // conditional checks start <= timespan <= end
+            if((start.before(tweet.getTimestamp()) || start.equals(tweet.getTimestamp())) && (end.after(tweet.getTimestamp()) || end.equals(tweet.getTimestamp()))){
+                timespanTwts.add(tweet);
+            }
+        }
+        return timespanTwts;
     }
 
     /**

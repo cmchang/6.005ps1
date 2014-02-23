@@ -19,7 +19,7 @@ import org.junit.Test;
  * 
  * For the inTimespan method, I will be testing:
  *      - number of tweets contained in the given timespan (0, 1, >1)
- *      - tweets in list not in timespan (before and after)
+ *      - tweets in list that are not in timespan (before and after)
  *        
  */
 
@@ -86,7 +86,7 @@ public class FilterTest {
     //  Tests for inTimespan Method
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     
-    @Test
+    @Test // both tweets within the timespan
     public void testInTimespanMultipleTweetsMultipleResults() {
         Calendar calendar = Calendar.getInstance();
         
@@ -101,6 +101,65 @@ public class FilterTest {
         assertTrue(inTimespan.containsAll(Arrays.asList(tweet1, tweet2)));
     }
     
+    @Test // two tweets within timespan, one outside timespan
+    public void testInTimespanMultipleTweetsInAndOutTimespan() {
+        Calendar calendar = Calendar.getInstance();
+        
+        calendar.set(2014, 1, 14, 9, 00, 00);
+        Date testDateStart = calendar.getTime();
+        calendar.set(2014, 1, 14, 12, 00, 00);
+        Date testDateEnd = calendar.getTime();
+        
+        List<Tweet> inTimespan = Filter.inTimespan(Arrays.asList(tweet1, tweet2, tweet3), new Timespan(testDateStart, testDateEnd));
+        
+        assertFalse(inTimespan.isEmpty());
+        assertTrue(inTimespan.containsAll(Arrays.asList(tweet1, tweet2)));
+    }
+    
+    @Test // all tweets outside of timespan
+    public void testInTimespanMultipleTweetsOutOfTimespan() {
+        Calendar calendar = Calendar.getInstance();
+        
+        calendar.set(2014, 1, 14, 7, 00, 00);
+        Date testDateStart = calendar.getTime();
+        calendar.set(2014, 1, 14, 9, 00, 00);
+        Date testDateEnd = calendar.getTime();
+        
+        List<Tweet> inTimespan = Filter.inTimespan(Arrays.asList(tweet1, tweet2, tweet3), new Timespan(testDateStart, testDateEnd));
+        
+        assertTrue(inTimespan.isEmpty());
+        assertFalse(inTimespan.contains(Arrays.asList(tweet1, tweet2)));
+    }
+    
+    @Test // one tweet, in timespan
+    public void testInTimespanOneTweetsInTimespan() {
+        Calendar calendar = Calendar.getInstance();
+        
+        calendar.set(2014, 1, 14, 9, 00, 00);
+        Date testDateStart = calendar.getTime();
+        calendar.set(2014, 1, 14, 12, 00, 00);
+        Date testDateEnd = calendar.getTime();
+        
+        List<Tweet> inTimespan = Filter.inTimespan(Arrays.asList(tweet1), new Timespan(testDateStart, testDateEnd));
+        
+        assertFalse(inTimespan.isEmpty());
+        assertTrue(inTimespan.containsAll(Arrays.asList(tweet1)));
+    }
+    
+    @Test //one tweet, out of timespan
+    public void testInTimespanOneTweetsOutOfTimespan() {
+        Calendar calendar = Calendar.getInstance();
+        
+        calendar.set(2014, 1, 14, 9, 00, 00);
+        Date testDateStart = calendar.getTime();
+        calendar.set(2014, 1, 14, 12, 00, 00);
+        Date testDateEnd = calendar.getTime();
+        
+        List<Tweet> inTimespan = Filter.inTimespan(Arrays.asList(tweet3), new Timespan(testDateStart, testDateEnd));
+        
+        assertTrue(inTimespan.isEmpty());
+        assertFalse(inTimespan.contains(Arrays.asList(tweet3)));
+    }
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //  Tests for containing Method
     ///////////////////////////////////////////////////////////////////////////////////////////////////
