@@ -16,6 +16,11 @@ import org.junit.Test;
  *      - varying sizes of tweets list (1, >1)
  *      - multiple tweets made by the desired user
  *          - with varying upper/lowercase letters in the username
+ * 
+ * For the inTimespan method, I will be testing:
+ *      - number of tweets contained in the given timespan (0, 1, >1)
+ *      - tweets in list not in timespan (before and after)
+ *        
  */
 
 public class FilterTest {
@@ -38,7 +43,7 @@ public class FilterTest {
         calendar.set(2014, 1, 14, 11, 00, 00);
         d2 = calendar.getTime();
         
-        calendar.set(2014, 1, 14, 11, 00, 00);
+        calendar.set(2014, 1, 14, 15, 00, 00);
         d3 = calendar.getTime();
         
         tweet1 = new Tweet(0, "alyssa", "is it reasonable to talk about rivest so much?", d1);
@@ -70,7 +75,6 @@ public class FilterTest {
     @Test //multiple tweets made by the desired user (username with varying lower/uppercases in different tweets)
     public void testWrittenByMultipleTweetsSameUser() {
         List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweet1, tweet2, tweet3), "alyssa");
-        System.out.println(writtenBy);
         assertFalse(writtenBy.isEmpty());
         assertEquals(2, writtenBy.size());
         assertTrue(writtenBy.contains(tweet1));

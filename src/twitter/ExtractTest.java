@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Iterator;
+
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -74,7 +76,7 @@ public class ExtractTest {
     public void testGetTimespanOneTweet() {
         
         Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1));
-        
+    
         assertEquals(d1, timespan.getStart());
 
     }
@@ -114,14 +116,23 @@ public class ExtractTest {
     public void testGetMentionedUsersTwoSameMentions() {
         Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet3, tweet4));
         Set<String> expectedAns = new HashSet<String>(Arrays.asList("h3llo_world2016", "world2016", "alyssa"));
-        assertTrue(mentionedUsers.equals(expectedAns));
+
+        //This prevents the test case from being implementation specific
+        //Converts all names in mentionedUsers to lower case
+        for(String name: mentionedUsers){
+            assertTrue (expectedAns.contains(name.toLowerCase()));
+        }
+        
     }
     
     @Test   //tests for tweets with one mention of another user
     public void testGetMentionedUsersOneMention() {
         Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet5));
         Set<String> expectedAns = new HashSet<String>(Arrays.asList("bbitdiddle"));
-        assertTrue(mentionedUsers.equals(expectedAns));
+        
+        for(String name: mentionedUsers){
+            assertTrue (expectedAns.contains(name.toLowerCase()));
+        }
     }
     
     @Test   //tests for tweets with no mentions of other users
