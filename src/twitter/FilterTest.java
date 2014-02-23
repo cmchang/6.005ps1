@@ -18,9 +18,11 @@ public class FilterTest {
 
     private static Date d1;
     private static Date d2;
+    private static Date d3;
     
     private static Tweet tweet1;
     private static Tweet tweet2;
+    private static Tweet tweet3;
     
     @BeforeClass
     public static void setUpBeforeClass() {
@@ -32,8 +34,12 @@ public class FilterTest {
         calendar.set(2014, 1, 14, 11, 00, 00);
         d2 = calendar.getTime();
         
+        calendar.set(2014, 1, 14, 11, 00, 00);
+        d3 = calendar.getTime();
+        
         tweet1 = new Tweet(0, "alyssa", "is it reasonable to talk about rivest so much?", d1);
         tweet2 = new Tweet(1, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
+        tweet3 = new Tweet(2, "AlySsa", "text", d3);
     }
 
     @Test
