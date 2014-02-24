@@ -20,6 +20,12 @@ import org.junit.Test;
  *      - varying tweet list sizes (=0, =1, >1)
  *      - list of tweets none/one/more than one mentions of others
  *      - mentions of other users with varying lower/upper cases
+ *      
+ * For the influencers method, I will be testing:
+ *      - varying social network sizes (=0, =1, >1)
+ *      - social networking with users following one/more than one user
+ *      - users with the none/same/varying user counts
+ *      - social network with users that have varying lower/upper cases
  */
 
 public class SocialNetworkTest {
@@ -143,7 +149,7 @@ public class SocialNetworkTest {
     //  Tests for influencers Method
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     
-    @Test
+    @Test //This tests an empty social network
     public void testInfluencersEmpty() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
         List<String> influencers = SocialNetwork.influencers(followsGraph);
@@ -152,4 +158,86 @@ public class SocialNetworkTest {
         
     }
 
+    @Test //This tests a social network of size one, user following one person
+    public void testInfluencersSizeOfOneAndOneFollower() {
+        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
+        Set<String> following = new HashSet<String>(Arrays.asList("h3llo_world2016"));
+        followsGraph.put("alyssa", following);
+        List<String> influencers = SocialNetwork.influencers(followsGraph);
+        
+        assertFalse(influencers.isEmpty());
+        assertEquals(influencers.size(), 1);
+        assertTrue(influencers.contains("h3llo_world2016"));
+        
+    }
+    
+    @Test //This tests a social network of size one, user following more than one person
+    public void testInfluencersSizeOneAndMultipleFollowers() {
+        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
+        Set<String> following = new HashSet<String>(Arrays.asList("h3llo_world2016", "world2016", "bbitdiddle"));
+
+        followsGraph.put("alyssa", following);
+        List<String> influencers = SocialNetwork.influencers(followsGraph);
+        
+        assertFalse(influencers.isEmpty());
+        assertEquals(influencers.size(), 1);
+        assertEquals(influencers.get(0).toLowerCase(), "h3llo_world2016");
+        
+    }
+    
+    @Test //This tests a social network of size greater than one, multiple users following the same person, varying lower/upper cases, users with the same/varying number of followers
+    public void testInfluencersFollowingSameUser() {
+        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
+        String user1 = new String("alyssa");
+        Set<String> following1 = new HashSet<String>(Arrays.asList("h3lLo_world2016", "world2016", "bBitdIDDle"));
+
+        String user2 = new String("bbitdiddle");
+        Set<String> following2 = new HashSet<String>(Arrays.asList("h3llo_woRld2016", "world2016"));
+
+        String user3 = new String("h3llo_woRld2016");
+        Set<String> following3 = new HashSet<String>(Arrays.asList("world2016"));
+        
+        followsGraph.put(user1, following1);
+        followsGraph.put(user2, following2);        
+        followsGraph.put(user3, following3);
+        
+        List<String> influencers = SocialNetwork.influencers(followsGraph);
+        
+        assertFalse(influencers.isEmpty());
+        assertEquals(influencers.size(), 3);
+        
+        //Expected order of list: world2016 (3 followers), h3llo_world2016 (2 followers), bbitdiddle (1 follower)
+        assertEquals(influencers.get(0).toLowerCase(), "world2016");
+        assertEquals(influencers.get(1).toLowerCase(), "h3llo_world2016");
+        assertEquals(influencers.get(2).toLowerCase(), "bbitdiddle");
+        
+    }
+    
+    @Test //This tests a social network of size greater than one, multiple users following the same person
+    public void testInfluencersFollowingDifferentUsers() {
+        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
+        String user1 = new String("alyssa");
+        Set<String> following1 = new HashSet<String>(Arrays.asList("world2016"));
+
+        String user2 = new String("bbitdiddle");
+        Set<String> following2 = new HashSet<String>(Arrays.asList("world2016","h3llo_world2016"));
+
+        String user3 = new String("h3llo_woRld2016");
+        Set<String> following3 = new HashSet<String>(Arrays.asList("world2016"));
+        
+        followsGraph.put(user1, following1);
+        followsGraph.put(user2, following2);        
+        followsGraph.put(user3, following3);
+        
+        List<String> influencers = SocialNetwork.influencers(followsGraph);
+        
+        assertFalse(influencers.isEmpty());
+        assertEquals(influencers.size(), 2);
+       
+      //Expected order of list: world2016 (3 followers), h3llo_world2016 (2 followers), bbitdiddle (1 follower)
+        assertEquals(influencers.get(0).toLowerCase(), "world2016");
+        assertEquals(influencers.get(1).toLowerCase(), "h3llo_world2016");
+
+        
+    }
 }

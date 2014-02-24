@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * SocialNetwork provides methods that operate on a social network.
@@ -76,6 +77,42 @@ public class SocialNetwork {
      * 
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
+        //This map will keep track of all the users and their corresponding number of followers
+        Map<String, Integer> followerCount = new HashMap<String, Integer>();
+        
+        //iterate through followsGraph and keep track of the number followers in follower count
+        for(String user: followsGraph.keySet()){
+            for(String following: followsGraph.get(user)){
+                if(followerCount.containsKey(following)){
+                    followerCount.put(following, followerCount.get(following)+1);
+                }else{
+                    followerCount.put(following, 1);
+                }
+            }
+        }
+        
+        System.out.println(followerCount);
+        
         throw new RuntimeException("not implemented");
+    }
+    
+
+}
+
+//Helper class so we can sort the users by the number of followers
+class ValueComparator implements Comparator<String> {
+
+    Map<String, Integer> base;
+    public ValueComparator(Map<String, Integer> base) {
+        this.base = base;
+    }
+
+    // Note: this comparator imposes orderings that are inconsistent with equals.    
+    public int compare(String a, String b) {
+        if (base.get(a) >= base.get(b)) {
+            return -1;
+        } else {
+            return 1;
+        } // returning 0 would merge keys
     }
 }
