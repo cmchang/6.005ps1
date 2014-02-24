@@ -180,8 +180,8 @@ public class SocialNetworkTest {
         List<String> influencers = SocialNetwork.influencers(followsGraph);
         
         assertFalse(influencers.isEmpty());
-        assertEquals(influencers.size(), 1);
-        assertEquals(influencers.get(0).toLowerCase(), "h3llo_world2016");
+        assertEquals(influencers.size(), 3);
+        assertTrue(influencers.containsAll(following));
         
     }
     
