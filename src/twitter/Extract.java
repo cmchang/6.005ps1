@@ -54,20 +54,19 @@ public class Extract {
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
         Set<String> mentionedUsers = new HashSet<String>();
         
-        for(int x = 0; x < tweets.size(); x++){
-            String curText = tweets.get(x).getText();
-          
+        for(Tweet twt: tweets){
+            String curText = twt.getText();
             while(curText.contains("@")){
                 String user;
                 
                 int start = curText.indexOf("@");
                 int end = curText.indexOf(" ", start);
                 if(end >= 0){
-                    user = curText.substring(start, end);
+                    user = curText.substring(start+1, end);
                 }else{ // end == -1, mention was at the end of tweet (no space after username)
-                    user = curText.substring(start);
+                    user = curText.substring(start+1);
                 }
-                
+                curText = curText.substring(start+1);
                 mentionedUsers.add(user.toLowerCase());
             }
         }

@@ -2,7 +2,10 @@ package twitter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.Arrays;
 
 /**
  * SocialNetwork provides methods that operate on a social network.
@@ -34,9 +37,37 @@ public class SocialNetwork {
      *         of evidence may be used at the implementor's discretion.
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        Map<String, Set<String>> graph = new HashMap<String, Set<String>>();
+        System.out.println(tweets);
+        for(Tweet twt: tweets){
+            Set<String> usersMentioned = new HashSet<String>();
+            System.out.println(usersMentioned);
+            usersMentioned =  Extract.getMentionedUsers(Arrays.asList(twt));
+            if(usersMentioned.size()>0){
+                String author = twt.getAuthor().toLowerCase();
+                if(graph.containsKey(author)){
+                    for(String user: usersMentioned){
+                        graph.get(author).add(user.toLowerCase());
+                    }
+                }else{
+                    graph.put(author, setKeysToLower(usersMentioned));
+                }
+            }
+        }
+        System.out.println(graph);
+        return graph;
     }
 
+    //helper function to take in a set of strings and return a matching set of strings (all lowercase)
+    private static Set<String> setKeysToLower(Set<String> setOfStr){
+        Set<String> setOfLower = new HashSet<String>();
+        for(String string: setOfStr){
+            setOfLower.add(string.toLowerCase());
+        }
+        
+        return setOfLower; 
+    }
+    
     /**
      * Find the people in a social network who have the greatest influence, in
      * the sense that they have the most followers.

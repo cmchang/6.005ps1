@@ -62,7 +62,7 @@ public class ExtractTest {
         //note: tweets 2 and 3 have the same time stamp
         tweet1 = new Tweet(0, "alyssa", "is it reasonable to talk about rivest so much?", d1);
         tweet2 = new Tweet(1, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
-        tweet3 = new Tweet(2, "H3LL0", "Hello! @H3LLO_WOLRD2016 @world2012 @alyssa", d3);
+        tweet3 = new Tweet(2, "H3LL0", "Hello! @H3LLO_WORLD2016 @world2016 @alyssa", d3);
         tweet4 = new Tweet(3, "world2012", "text4 @h3Llo_world2016", d4);
         tweet5 = new Tweet(5, "h3Llo_world2016", "text5 @BBITdiDdle", d5);
 
@@ -76,7 +76,6 @@ public class ExtractTest {
     public void testGetTimespanOneTweet() {
         
         Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1));
-    
         assertEquals(d1, timespan.getStart());
 
     }
@@ -119,10 +118,11 @@ public class ExtractTest {
 
         //This prevents the test case from being implementation specific
         //Converts all names in mentionedUsers to lower case
+        Set<String> mentionedUsersLowercase = new HashSet<String>();
         for(String name: mentionedUsers){
-            assertTrue (expectedAns.contains(name.toLowerCase()));
+            mentionedUsersLowercase.add(name.toLowerCase());
         }
-        
+        assertTrue (mentionedUsersLowercase.containsAll(expectedAns));
     }
     
     @Test   //tests for tweets with one mention of another user
