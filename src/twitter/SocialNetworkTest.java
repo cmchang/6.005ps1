@@ -59,8 +59,8 @@ public class SocialNetworkTest {
         //note: tweets 2 and 3 have the same time stamp
         tweet1 = new Tweet(0, "alyssa", "is it reasonable to talk about rivest so much?", d1);
         tweet2 = new Tweet(1, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
-        tweet3 = new Tweet(2, "H3LL0", "Hello! @H3LLO_WOLRD2016 @world2012 @alyssa", d3);
-        tweet4 = new Tweet(3, "world2012", "text4 @h3Llo_world2016", d4);
+        tweet3 = new Tweet(2, "H3LL0", "Hello! @H3LLO_WORLD2016 @world2016 @alyssa", d3);
+        tweet4 = new Tweet(3, "world2016", "text4 @h3Llo_world2016", d4);
         tweet5 = new Tweet(5, "h3Llo_world2016", "text5 @BBITdiDdle", d5);
 
     }
@@ -120,7 +120,7 @@ public class SocialNetworkTest {
         
         assertFalse(followsGraph.isEmpty());
         
-        Set<String> keys = new HashSet<String>(Arrays.asList("h3llo_world2016","world2012","h3Llo"));
+        Set<String> keys = new HashSet<String>(Arrays.asList("h3llo_world2016","world2016","h3ll0"));
         assertTrue(setKeysToLower(followsGraph.keySet()).containsAll(keys));
         
         //checks who "h3llo_world2016" is following
@@ -128,12 +128,13 @@ public class SocialNetworkTest {
         assertTrue(mapStrsToLower(followsGraph).get("h3llo_world2016").containsAll(valuesA));
         
       //checks who "world2016" is following
-        Set<String> valuesB = new HashSet<String>(Arrays.asList("h3Llo_world2016"));
+        Set<String> valuesB = new HashSet<String>(Arrays.asList("h3llo_world2016"));
         assertTrue(mapStrsToLower(followsGraph).get("world2016").containsAll(valuesB));
         
       //checks who "h3llo" is following
-        Set<String> valuesC = new HashSet<String>(Arrays.asList("h3Llo_world2016", "world2016", "alyssa"));
-        assertTrue(mapStrsToLower(followsGraph).get("h3llo").containsAll(valuesC));
+        Set<String> valuesC = new HashSet<String>(Arrays.asList("h3llo_world2016", "world2016", "alyssa"));
+        assertTrue(mapStrsToLower(followsGraph).get("h3ll0").containsAll(valuesC));
+        
         
     }
     

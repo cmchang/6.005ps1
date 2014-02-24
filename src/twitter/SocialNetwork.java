@@ -38,10 +38,8 @@ public class SocialNetwork {
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
         Map<String, Set<String>> graph = new HashMap<String, Set<String>>();
-        System.out.println(tweets);
         for(Tweet twt: tweets){
             Set<String> usersMentioned = new HashSet<String>();
-            System.out.println(usersMentioned);
             usersMentioned =  Extract.getMentionedUsers(Arrays.asList(twt));
             if(usersMentioned.size()>0){
                 String author = twt.getAuthor().toLowerCase();
@@ -54,7 +52,6 @@ public class SocialNetwork {
                 }
             }
         }
-        System.out.println(graph);
         return graph;
     }
 
