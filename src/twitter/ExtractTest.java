@@ -3,6 +3,7 @@ package twitter;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
@@ -101,7 +102,7 @@ public class ExtractTest {
         assertEquals(d1, timespan.getStart());
 
     }
-    
+       
             // Checks partitions in: (A2)
     @Test   //tests for a list with two tweets
     public void testGetTimespanTwoTweets() {
@@ -129,6 +130,14 @@ public class ExtractTest {
         assertEquals(d1, timespan.getStart());
         assertEquals(d5, timespan.getEnd());
     }
+    
+//  // Checks partitions in: (A4)
+//@Test   //tests for a list with no tweets
+//public void testGetTimespanNoTweets() {
+//ArrayList emptyArr = new ArrayList();
+//Timespan timespan = Extract.getTimespan(emptyArr);
+//
+//} 
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //  Tests for GetMentionedUsers Method
