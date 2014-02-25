@@ -146,7 +146,6 @@ public class SocialNetworkTest {
         
         //checks who "h3llo_world2016" is following
         Set<String> valuesA = new HashSet<String>(Arrays.asList("bbitdiddle"));
-        System.out.println(mapStrsToLower(followsGraph).get("h3llo_world2016"));
         assertTrue(mapStrsToLower(followsGraph).get("h3llo_world2016").containsAll(valuesA));
         
         //checks who "world2016" is following

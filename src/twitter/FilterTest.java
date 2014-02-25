@@ -191,7 +191,6 @@ public class FilterTest {
     @Test   // one word contained in all tweets, varied upper/lowercases
     public void testContainingWordInTwts() {
         List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2, tweet3, tweet4), Arrays.asList("talk"));
-        System.out.println(containing);
 
         assertFalse(containing.isEmpty());
         assertTrue(containing.containsAll(Arrays.asList(tweet1, tweet2, tweet3, tweet4)));
