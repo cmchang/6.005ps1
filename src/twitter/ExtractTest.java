@@ -137,36 +137,33 @@ public class ExtractTest {
             // Checks partitions in: (B1), (C), (D2)
     @Test   //tests for tweets with mentions of the same users
     public void testGetMentionedUsersSameMentions() {
-    Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet5, tweet6));
-    Set<String> expectedAns = new HashSet<String>(Arrays.asList("bbitdiddle"));
-    
-    //This prevents the test case from being implementation specific
-    //Converts all names in mentionedUsers to lower case
-    Set<String> mentionedUsersLowercase = new HashSet<String>();
-    for(String name: mentionedUsers){
-        mentionedUsersLowercase.add(name.toLowerCase());
-    }
-    assertTrue (mentionedUsersLowercase.containsAll(expectedAns));
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet5, tweet6));
+        Set<String> expectedAns = new HashSet<String>(Arrays.asList("bbitdiddle"));
+        
+        //This prevents the test case from being implementation specific
+        //Converts all names in mentionedUsers to lower case
+        Set<String> mentionedUsersLowercase = new HashSet<String>();
+        for(String name: mentionedUsers){
+            mentionedUsersLowercase.add(name.toLowerCase());
+        }
+        assertTrue (mentionedUsersLowercase.containsAll(expectedAns));
     }
     
 
             // Checks partitions in: (B2), (C), (D2)
     @Test   //tests for tweets with mentions of different users
     public void testGetMentionedUsersDiffMentions() {
-    Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet4, tweet5));
-    Set<String> expectedAns = new HashSet<String>(Arrays.asList("bbitdiddle","h3llo_world2016"));
-    
-    //This prevents the test case from being implementation specific
-    //Converts all names in mentionedUsers to lower case
-    Set<String> mentionedUsersLowercase = new HashSet<String>();
-    for(String name: mentionedUsers){
-        mentionedUsersLowercase.add(name.toLowerCase());
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet4, tweet5));
+        Set<String> expectedAns = new HashSet<String>(Arrays.asList("bbitdiddle","h3llo_world2016"));
+        
+        //This prevents the test case from being implementation specific
+        //Converts all names in mentionedUsers to lower case
+        Set<String> mentionedUsersLowercase = new HashSet<String>();
+        for(String name: mentionedUsers){
+            mentionedUsersLowercase.add(name.toLowerCase());
+        }
+        assertTrue (mentionedUsersLowercase.containsAll(expectedAns));
     }
-    assertTrue (mentionedUsersLowercase.containsAll(expectedAns));
-    }
-
-
-    
     
             // Checks partitions in: (B3), (C), (D2)
     @Test   //tests for tweets with mentions of the same and different users

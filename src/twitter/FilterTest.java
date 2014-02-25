@@ -28,11 +28,12 @@ import org.junit.Test;
  *          (B1) before, (B2) after, (B3) within
  * 
  * For the containing method, I will be testing:
- *      - words not in the tweets
- *      - words in the tweets:
- *          - =1, >1
- *      - words in and not in tweets
- *      - case insensitive
+ *      (A) Number of words you're looking for in the tweets
+ *          (A1) =0, (A2) =1, (A3) >1
+ *      (B) Number of tweets containing the words
+ *          (B1) =0, (B2) =1, (B3) >1 and < all (for # tweets > 3) (B4) all tweets (for # tweets >1)
+ *      (C) case insensitive
+ *      (D) doesn't return a tweet if word is only a substring in the text of the tweet
  */
 
 public class FilterTest {
@@ -66,7 +67,7 @@ public class FilterTest {
         tweet1 = new Tweet(0, "alyssa", "is it reasonable to talk about rivest so much?", d1);
         tweet2 = new Tweet(1, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
         tweet3 = new Tweet(2, "AlySsa", "text tALk", d3);
-        tweet4 = new Tweet(2, "AlySsa", "text talK", d3);
+        tweet4 = new Tweet(3, "AlySsa", "text talK", d4);
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,29 +185,51 @@ public class FilterTest {
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //  Tests for containing Method
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////    
     
-    @Test   // word contained in multiple tweets, varied upper/lowercases
+            // Checks partitions in: (A1), (B4), (C)
+    @Test   // one word contained in all tweets, varied upper/lowercases
     public void testContainingWordInTwts() {
         List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2, tweet3, tweet4), Arrays.asList("talk"));
-        
+        System.out.println(containing);
+
         assertFalse(containing.isEmpty());
         assertTrue(containing.containsAll(Arrays.asList(tweet1, tweet2, tweet3, tweet4)));
     }
 
-    @Test   // word not contained in tweets
+            // Checks partitions in: (A3), (B1)
+    @Test   // all words not contained in tweets
     public void testContainingWordNotInTwts() {
-        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2), Arrays.asList("helloworld"));
+        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2), Arrays.asList("helloworld", "yayayay"));
         
         assertTrue(containing.isEmpty());
         assertFalse(containing.containsAll(Arrays.asList(tweet1, tweet2)));
     }
     
-    @Test   // word contained in multiple tweets, varied upper/lowercases
+            // Checks partitions in: (A2), (B2)
+    @Test   // word contained in only one tweet of the many tweets given
     public void testContainingWordInAndNotInTwts() {
-        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2, tweet3, tweet4), Arrays.asList("talk", "helloworld"));
+        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2, tweet3, tweet4), Arrays.asList("about"));
+        assertFalse(containing.isEmpty());
+        assertTrue(containing.containsAll(Arrays.asList(tweet1)));
+    }
+
+            // Checks partitions in: (A3), (B3)
+    @Test   // multiple words contained in some tweet of the many tweets given
+        public void testContainingMultipleWordInSomeTwts() {
+        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2, tweet3, tweet4), Arrays.asList("text", "talk"));
         
+        assertFalse(containing.isEmpty());
+        assertTrue(containing.containsAll(Arrays.asList(tweet3, tweet4)));
+    }
+        
+            // Checks partitions in: (D)
+    @Test   // asks for a word that is a substring in the text of a tweet
+    public void testContainingWordNoSubstrings() {
+        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2, tweet3, tweet4), Arrays.asList("alk"));
+
         assertTrue(containing.isEmpty());
         assertFalse(containing.containsAll(Arrays.asList(tweet1, tweet2, tweet3, tweet4)));
+
     }
 }

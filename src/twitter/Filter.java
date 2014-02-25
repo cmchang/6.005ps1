@@ -73,15 +73,24 @@ public class Filter {
      */
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
         List<Tweet> twtsWithWords = new ArrayList<Tweet>();
-        boolean wordIsContained;
+        boolean allWordsContained;
         for(Tweet tweet: tweets){
-            wordIsContained = true;
+            allWordsContained = true;
             for(String word:words){
-                if(!tweet.getText().toLowerCase().contains(word.toLowerCase())){
-                    wordIsContained = false;
+                String textLC = tweet.getText().toLowerCase();
+                String wordLC = word.toLowerCase();
+                
+                String wordSpaceBoth = " " + wordLC + " ";
+                String wordSpaceBefore = " " + wordLC;
+                String wordSpaceAfter = wordLC + " ";
+                
+                
+                if (!(textLC.contains(wordSpaceBoth) || textLC.startsWith(wordSpaceAfter) || textLC.endsWith(wordSpaceBefore))){
+                    allWordsContained = false;
                 }
+
             }
-            if(wordIsContained){
+            if(allWordsContained){
                 twtsWithWords.add(tweet);
             }
         }
