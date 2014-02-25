@@ -107,14 +107,15 @@ public class SocialNetwork {
         
         System.out.println(graph);
         for(String user: networkA.keySet()){
-            if(graph.containsKey(user)){
-                Set<String> following = graph.get(user);
+            String userLC = user.toLowerCase();
+            if(graph.containsKey(userLC)){
+                Set<String> following = graph.get(userLC);
                 for(String follow: networkA.get(user)){
                     following.add(follow);
                 }
-                graph.put(user, following);
+                graph.put(userLC, following);
             }else{
-                graph.put(user, networkA.get(user));
+                graph.put(userLC, networkA.get(user));
             }
         }
         System.out.println(graph);
