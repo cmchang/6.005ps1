@@ -16,16 +16,24 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /*
+ * Note: I label all of the partition spaces (i.e. A1, B1, B2, etc) so I can explain which
+ * which partition spaces I'm testing above each test method.
+ * 
  * For the guessFollowsGraph method, I will be testing:
- *      - varying tweet list sizes (=0, =1, >1)
- *      - list of tweets none/one/more than one mentions of others
- *      - mentions of other users with varying lower/upper cases
+ *      (A) varying tweet list sizes (=0, =1, >1)
+ *          (A1) =0, (A2) =1, (A3) >1
+ *      (B) list of tweets no/one/more than one mentions of others
+ *          (B1) no mentions, (B2) one mention, (B3) more than one mention
+ *      (C) mentions of other users with varying lower/upper cases
  *      
  * For the influencers method, I will be testing:
- *      - varying social network sizes (=0, =1, >1)
- *      - social networking with users following one/more than one user
- *      - users with the none/same/varying user counts
- *      - social network with users that have varying lower/upper cases
+ *      (A) varying social network sizes (=0, =1, >1)
+ *          (A1) =0, (A2) =1, (A3) >1
+ *      (B) social networking with users following one/more than one user
+ *          (B1) =0, (B2) =1, (B3) >1
+ *      (C) users with the same/varying number of follower
+ *          (C1) same (C2) varying
+ *      (D) social network with users that have varying lower/upper cases
  */
 
 public class SocialNetworkTest {
@@ -98,7 +106,8 @@ public class SocialNetworkTest {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //  Tests for guessFollowsGraph Method
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-
+ 
+            // Checks partitions in: (A1), (B1)
     @Test   // this tests an empty tweet list
     public void testGuessFollowsGraphEmpty() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
@@ -106,6 +115,7 @@ public class SocialNetworkTest {
         assertTrue(followsGraph.isEmpty());
     }
     
+            // Checks partitions in: (A2), (B2)
     @Test   // this tests a tweet list of size 1, with one mention of another user
     public void testGuessFollowsGraphOneMention() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(Arrays.asList(tweet5));
@@ -120,6 +130,7 @@ public class SocialNetworkTest {
         
     }
     
+            // Checks partitions in: (A3), (B3), (C)
     @Test   // this tests a tweet list of size >1, with one and multiple mentions of other users (varying lower/upper cases)
     public void testGuessFollowsGraphMultipleMentions() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(Arrays.asList(tweet1, tweet2, tweet3, tweet4, tweet5));
@@ -149,7 +160,8 @@ public class SocialNetworkTest {
     //  Tests for influencers Method
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     
-    @Test //This tests an empty social network
+            // Checks partitions in: (A1)
+    @Test   //This tests an empty social network
     public void testInfluencersEmpty() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
         List<String> influencers = SocialNetwork.influencers(followsGraph);
@@ -157,8 +169,9 @@ public class SocialNetworkTest {
         assertTrue(influencers.isEmpty());
         
     }
-
-    @Test //This tests a social network of size one, user following one person
+    
+            // Checks partitions in: (A2), (B2)
+    @Test   //This tests a social network of size one, user following one person
     public void testInfluencersSizeOfOneAndOneFollower() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
         Set<String> following = new HashSet<String>(Arrays.asList("h3llo_world2016"));
@@ -171,6 +184,7 @@ public class SocialNetworkTest {
         
     }
     
+          // Checks partitions in: (A2), (B3)
     @Test //This tests a social network of size one, user following more than one person
     public void testInfluencersSizeOneAndMultipleFollowers() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
@@ -185,7 +199,10 @@ public class SocialNetworkTest {
         
     }
     
-    @Test //This tests a social network of size greater than one, multiple users following the same person, varying lower/upper cases, users with the same/varying number of followers
+            // Checks partitions in: (A3), (B1)/(B2)/(B3), (C1), (D)
+    @Test   //This tests a social network of size greater than one, multiple users following the same person, 
+            //varying lower/upper cases, users with the same/varying number of followers
+            //This also tests if a user is added without following anyone
     public void testInfluencersFollowingSameUser() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
         String user1 = new String("alyssa");
@@ -197,12 +214,17 @@ public class SocialNetworkTest {
         String user3 = new String("h3llo_woRld2016");
         Set<String> following3 = new HashSet<String>(Arrays.asList("world2016"));
         
+        String user4 = new String("me");
+        Set<String> following4 = new HashSet<String>(); //not following anyone!
+        
         followsGraph.put(user1, following1);
         followsGraph.put(user2, following2);        
         followsGraph.put(user3, following3);
+        followsGraph.put(user4, following4);
         
         List<String> influencers = SocialNetwork.influencers(followsGraph);
         
+        System.out.println(influencers);
         assertFalse(influencers.isEmpty());
         assertEquals(influencers.size(), 3);
         
@@ -213,7 +235,8 @@ public class SocialNetworkTest {
         
     }
     
-    @Test //This tests a social network of size greater than one, multiple users following the same person
+            // Checks partitions in: (A3), (B2)/(B3), (C1)
+    @Test   //This tests a social network of size greater than one, multiple users following the same person
     public void testInfluencersFollowingDifferentUsers() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
         String user1 = new String("alyssa");
