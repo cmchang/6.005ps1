@@ -99,18 +99,13 @@ public class SocialNetwork {
      * @return a new network combining all the users and who they follow from networkA and networkB
      */
     public static Map<String, Set<String>> mergeSocialNetworks(Map<String, Set<String>> networkA, Map<String, Set<String>> networkB){
-        Map<String, Set<String>> graph = networkB;
+        Map<String, Set<String>> graph = mapStrsToLower(networkB);
         
-        System.out.println(networkA);
-        System.out.println(networkB);
-
-        
-        System.out.println(graph);
         for(String user: networkA.keySet()){
             String userLC = user.toLowerCase();
             if(graph.containsKey(userLC)){
                 Set<String> following = graph.get(userLC);
-                for(String follow: networkA.get(user)){
+                for(String follow: setKeysToLower(networkA.get(user))){
                     following.add(follow);
                 }
                 graph.put(userLC, following);
@@ -118,7 +113,6 @@ public class SocialNetwork {
                 graph.put(userLC, networkA.get(user));
             }
         }
-        System.out.println(graph);
         return graph;
     }
     
