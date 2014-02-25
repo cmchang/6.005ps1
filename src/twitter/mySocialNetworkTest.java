@@ -65,8 +65,15 @@ public class mySocialNetworkTest {
     
     /*
     * The following tests check the returned value from guessFollowsGraph which makes guesses about who follows
-    * whom based on mentions AND hashtags.  (Further down, I have methods that just considers the returned social 
-    * network that only considers hashtags to make a guess about who follows whom).
+    * whom based on mentions AND hashtags. 
+    * 
+    * Further down, I have a many more tests to check the method guessFollowsUnpopularHashtag that just considers 
+    * the returned social network that only considers hashtags to make a guess about who follows whom.
+    * 
+    * guessFollowsGraph has a method that merges the social network of guesses from mentions and the social network
+    * of guesses from the guessFollowsUnpopularHashtag method - so the guessFollowsUnpopularHashtag method is tested
+    * more thoroughly.
+    * 
     */
     
     @Test   // This tests all the tweets that I have created - various mentions and various hashtags
