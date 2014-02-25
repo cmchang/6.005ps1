@@ -52,7 +52,7 @@ public class SocialNetwork {
                         graphMentions.get(author).add(user.toLowerCase());
                     }
                 }else{
-                    graphMentions.put(author, setKeysToLower(usersMentioned));
+                    graphMentions.put(author, helper.setOfStrToLowerCase(usersMentioned));
                 }
             }
         }
@@ -64,28 +64,7 @@ public class SocialNetwork {
         return graph;
     }
 
-    //helper function to take in a set of strings and return a matching set of strings (all lowercase)
-    private static Set<String> setKeysToLower(Set<String> setOfStr){
-        Set<String> setOfLower = new HashSet<String>();
-        for(String string: setOfStr){
-            setOfLower.add(string.toLowerCase());
-        }
-        return setOfLower; 
-    }
-    
-    // helper function to take in a Map<String, Set<String>> and return 
-    // a Map<String, Set<String>> where all the strings are lowercase
-    public static Map<String, Set<String>> mapStrsToLower(Map<String, Set<String>> map){
-        
-        Map<String, Set<String>> newMap = new HashMap<String, Set<String>>();
-        for(String key: map.keySet()){
-            Set<String> valuesLowerCase = new HashSet<String>();
-            valuesLowerCase = setKeysToLower(map.get(key));
-            newMap.put(key.toLowerCase(), valuesLowerCase);
-        }
-        
-        return newMap; 
-    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //  Additional functions for part 4:  Uncommon Hashtags
     //  Guess/Assumption: An unpopular hashtag (a hashtag used by at most 3 people) 
@@ -99,13 +78,13 @@ public class SocialNetwork {
      * @return a new network combining all the users and who they follow from networkA and networkB
      */
     public static Map<String, Set<String>> mergeSocialNetworks(Map<String, Set<String>> networkA, Map<String, Set<String>> networkB){
-        Map<String, Set<String>> graph = mapStrsToLower(networkB);
+        Map<String, Set<String>> graph = helper.mapOfStrToLowerCase(networkB);
         
         for(String user: networkA.keySet()){
             String userLC = user.toLowerCase();
             if(graph.containsKey(userLC)){
                 Set<String> following = graph.get(userLC);
-                for(String follow: setKeysToLower(networkA.get(user))){
+                for(String follow: helper.setOfStrToLowerCase(networkA.get(user))){
                     following.add(follow);
                 }
                 graph.put(userLC, following);
