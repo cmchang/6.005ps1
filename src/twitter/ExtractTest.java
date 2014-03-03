@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Iterator;
 
 
 import org.junit.BeforeClass;
@@ -35,8 +34,8 @@ import org.junit.Test;
  *          (B2) different users
  *          (B) same and different users
  *      (C) with usernames with digits, underscores, and varying in upper/lowercase letters
- *      (D) varying sizes of the lsit of tweets (=1, >1)
- *          (D1) =1, (D2) >1
+ *      (D) varying sizes of the lsit of tweets (=1, >1, =0)
+ *          (D1) =1, (D2) >1 (D3) = 0
  *      (E) Tweet contains e-mail address
  *      (F) Tweet contains @ sign not followed by a user
  *      (G) Tweet contains multiple @ signs in a row
@@ -257,6 +256,18 @@ public class ExtractTest {
             mentionedUsersLowercase.add(name.toLowerCase());
         }
         assertFalse(mentionedUsers.isEmpty());
-        assertTrue (mentionedUsersLowercase.containsAll(expectedAns));    }    
+        assertTrue (mentionedUsersLowercase.containsAll(expectedAns));    
+    }    
     
+
+            // Checks partition in (D3)
+    @Test   //tests for tweets with a mention that ends with punctuation
+    public void testGetMentionedUsersEmptyList() {
+        ArrayList emptyList = new ArrayList();
+        Set<String> mentionedUsers = Extract.getMentionedUsers(emptyList);
+        
+        assertTrue(mentionedUsers.isEmpty());
+    
+    }
 }
+
