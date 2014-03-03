@@ -37,6 +37,10 @@ import org.junit.Test;
  *      (C) with usernames with digits, underscores, and varying in upper/lowercase letters
  *      (D) varying sizes of the lsit of tweets (=1, >1)
  *          (D1) =1, (D2) >1
+ *      (E) Tweet contains e-mail address
+ *      (F) Tweet contains @ sign not followed by a user
+ *      (G) Tweet contains multiple @ signs in a row
+ *      (H) Tweet mention ends with punctuation
  */
 
 public class ExtractTest {
@@ -47,6 +51,7 @@ public class ExtractTest {
     private static Date d4;
     private static Date d5;
     private static Date d6;
+    private static Date d7;
 
     
     private static Tweet tweet1;
@@ -55,7 +60,10 @@ public class ExtractTest {
     private static Tweet tweet4;
     private static Tweet tweet5;
     private static Tweet tweet6;
-
+    private static Tweet tweet7;
+    private static Tweet tweet8;
+    private static Tweet tweet9;
+    private static Tweet tweet10;
     
     @BeforeClass
     public static void setUpBeforeClass() {
@@ -78,6 +86,9 @@ public class ExtractTest {
         
         calendar.set(2014, 1, 14, 3, 00, 00);
         d6 = calendar.getTime();
+        
+        calendar.set(2014, 1, 14, 3, 00, 00);
+        d7 = calendar.getTime();
 
         
         //note: tweets 2 and 3 have the same time stamp
@@ -86,8 +97,11 @@ public class ExtractTest {
         tweet3 = new Tweet(2, "H3LL0", "Hello! @H3LLO_WORLD2016 @world2016 @alyssa", d3);
         tweet4 = new Tweet(3, "world2012", "text4 @h3Llo_world2016", d4);
         tweet5 = new Tweet(5, "h3Llo_world2016", "text5 @BBITdiDdle", d5);
-        tweet6 = new Tweet(6, "alyssa", "text6 @bbitdiDdle", d5);
-
+        tweet6 = new Tweet(6, "alyssa", "text6 @bbitdiDdle", d6);
+        tweet7 = new Tweet(6, "alyssa", "text6 alyssa@mit.edu", d7);
+        tweet8 = new Tweet(6, "alyssa", "text6 @ hello", d7);
+        tweet9 = new Tweet(6, "alyssa", "text6 @@@ hihi", d7);
+        tweet10 = new Tweet(6, "alyssa", "Hi @world!!", d7);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,6 +222,41 @@ public class ExtractTest {
         assertTrue(mentionedUsers.isEmpty());
     }
     
+            // Checks partitions in: (E)
+    @Test   //tests for tweets with e-mail address
+    public void testGetMentionedUsersEmailAddress() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet7));
+        
+        assertTrue(mentionedUsers.isEmpty());
+    }
+    
+            // Checks partitions in: (F)
+    @Test   //tests for tweets with @ but no user
+    public void testGetMentionedUsersAtSignNoUser() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet8));
+        
+        assertTrue(mentionedUsers.isEmpty());
+    }
+    
+            // Checks partitions in: (G)
+    @Test   //tests for tweets multiple @ signs in a row
+    public void testGetMentionedUsersMultipleAtSignsInARow() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet9));
+        
+        assertTrue(mentionedUsers.isEmpty());
+    }
 
+            // Checks partitions in: (H)
+    @Test   //tests for tweets with a mention that ends with punctuation
+    public void testGetMentionedUsersPunctuation() {
+        Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet10));
+        Set<String> expectedAns = new HashSet<String>(Arrays.asList("world"));
+        
+        Set<String> mentionedUsersLowercase = new HashSet<String>();
+        for(String name: mentionedUsers){
+            mentionedUsersLowercase.add(name.toLowerCase());
+        }
+        assertFalse(mentionedUsers.isEmpty());
+        assertTrue (mentionedUsersLowercase.containsAll(expectedAns));    }    
     
 }

@@ -1,6 +1,5 @@
 package twitter;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.Date;
@@ -25,18 +24,18 @@ public class Extract {
      */
     public static Timespan getTimespan(List<Tweet> tweets) {
         Date start = new Date();
-        Date end = new Date();
-        if(tweets.size() >= 0){
+        Date end = start;
+        if(tweets.size() > 0){
             start = tweets.get(0).getTimestamp();
             end = tweets.get(0).getTimestamp();
         
-            for(int x = 0; x < tweets.size(); x++){
-                Date curTwt = tweets.get(x).getTimestamp();
-                if(start.after(curTwt)){
-                    start = curTwt;
+            for(int x = 1; x < tweets.size(); x++){
+                Date currentTwt = tweets.get(x).getTimestamp();
+                if(start.after(currentTwt)){
+                    start = currentTwt;
                 }
-                if(end.before(curTwt)){
-                    end = curTwt;
+                if(end.before(currentTwt)){
+                    end = currentTwt;
                 }
             }
         }
@@ -57,23 +56,50 @@ public class Extract {
      *         are equivalent.  A username may occur at most once in the returned 
      *         set.
      */
+    public static String validUsernameChars = "abcdefghijklmnopqrstuvwxyz1234567890_";
+    public static String endPunctuation = ".?!";
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
         Set<String> mentionedUsers = new HashSet<String>();
         
         for(Tweet twt: tweets){
-            String curText = twt.getText();
-            while(curText.contains("@")){
+            String currentText = twt.getText();
+            while(currentText.contains("@")){
                 String user;
+                int start = currentText.indexOf("@");
+                int end = currentText.indexOf(" ", start);
                 
-                int start = curText.indexOf("@");
-                int end = curText.indexOf(" ", start);
+
                 if(end >= 0){
-                    user = curText.substring(start+1, end);
+                    user = currentText.substring(start+1, end); //start+1 cuts off '@'
                 }else{ // end == -1, mention was at the end of tweet (no space after username)
-                    user = curText.substring(start+1);
+                    user = currentText.substring(start+1);
                 }
-                curText = curText.substring(start+1);
-                mentionedUsers.add(user.toLowerCase());
+                
+                //check if user is an e-mail address
+                boolean notEmail;
+                if(start > 0){
+                    notEmail = (currentText.charAt(start-1) == ' ');
+                }else{
+                    notEmail = false;
+                }
+                
+                //check if user ends in punctuation - if it does, get rid of it
+                while(user.endsWith("!")||user.endsWith("?")||user.endsWith(".")){
+                    user = user.substring(0, user.length()-1);
+                }
+                boolean nonemptyUser = user.length() > 0;
+                
+                boolean validCharsOnly = true;
+                for(int i = 0; i < user.length(); i++){
+                    if(!validUsernameChars.contains(Character.toString(user.charAt(i)).toLowerCase())){
+                        validCharsOnly = false;
+                    }
+                }
+                
+                if(nonemptyUser && notEmail && validCharsOnly){
+                    mentionedUsers.add(user.toLowerCase());
+                }
+                currentText = currentText.substring(start+1);
             }
         }
         

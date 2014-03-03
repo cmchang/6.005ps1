@@ -171,7 +171,6 @@ public class SocialNetworkTest {
 
         followsGraph.put("alyssa", following);
         List<String> influencers = SocialNetwork.influencers(followsGraph);
-        
         assertFalse(influencers.isEmpty());
         assertEquals(influencers.size(), 3);
         assertTrue(influencers.containsAll(following));
