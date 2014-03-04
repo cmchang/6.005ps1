@@ -109,8 +109,12 @@ public class SocialNetworkTest {
         assertTrue(Helper.setOfStrToLowerCase(followsGraph.keySet()).contains("h3llo_world2016"));
         
         Set<String> solns = new HashSet<String>(Arrays.asList("bbitdiddle"));
-
-        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(solns));
+        
+        if(Helper.mapOfStrToLowerCase(followsGraph).containsKey("h3llo_world2016")){
+            assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(solns));
+        }else{
+            fail(); //solution does not contain desired key
+        }
         
     }
     
@@ -125,15 +129,27 @@ public class SocialNetworkTest {
         
         //checks who "h3llo_world2016" is following
         Set<String> valuesA = new HashSet<String>(Arrays.asList("bbitdiddle"));
-        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(valuesA));
+        if(Helper.mapOfStrToLowerCase(followsGraph).containsKey("h3llo_world2016")){
+            assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(valuesA));
+        }else{
+            fail(); //solution does not contain desired key
+        }
         
         //checks who "world2016" is following
         Set<String> valuesB = new HashSet<String>(Arrays.asList("h3llo_world2016"));
-        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("world2016").containsAll(valuesB));
+        if(Helper.mapOfStrToLowerCase(followsGraph).containsKey("world2016")){
+            assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("world2016").containsAll(valuesB));
+        }else{
+            fail(); //solution does not contain desired key
+        }
         
         //checks who "h3llo" is following
         Set<String> valuesC = new HashSet<String>(Arrays.asList("h3llo_world2016", "world2016", "alyssa"));
-        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3ll0").containsAll(valuesC));
+        if(Helper.mapOfStrToLowerCase(followsGraph).containsKey("h3ll0")){
+            assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3ll0").containsAll(valuesC));
+        }else{
+            fail(); //solution does not contain desired key
+        }
     }
             // Checks partitions in (D)
     @Test   // this tests when a user follows him/herself
@@ -218,9 +234,13 @@ public class SocialNetworkTest {
         assertEquals(influencers.size(), 3);
         
         //Expected order of list: world2016 (3 followers), h3llo_world2016 (2 followers), bbitdiddle (1 follower)
-        assertEquals(influencers.get(0).toLowerCase(), "world2016");
-        assertEquals(influencers.get(1).toLowerCase(), "h3llo_world2016");
-        assertEquals(influencers.get(2).toLowerCase(), "bbitdiddle");
+        if(influencers.size() == 3){
+            assertEquals(influencers.get(0).toLowerCase(), "world2016");
+            assertEquals(influencers.get(1).toLowerCase(), "h3llo_world2016");
+            assertEquals(influencers.get(2).toLowerCase(), "bbitdiddle");
+        }else{
+            fail(); //influencers does not have the right number of users
+        }
         
     }
     
@@ -245,8 +265,12 @@ public class SocialNetworkTest {
         
         assertFalse(influencers.isEmpty());
         assertEquals(influencers.size(), 2);
-        assertEquals(influencers.get(0).toLowerCase(), "world2016");
-        assertEquals(influencers.get(1).toLowerCase(), "h3llo_world2016");
+        if(influencers.size() == 2){
+            assertEquals(influencers.get(1).toLowerCase(), "h3llo_world2016");
+            assertEquals(influencers.get(0).toLowerCase(), "world2016");
+        }else{
+            fail(); //influencers does not have the right number of users
+        }
 
         
     }
