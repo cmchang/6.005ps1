@@ -110,16 +110,14 @@ public class ExtractTest {
             // Checks partitions in: (A1)
     @Test   //tests for a list with one tweet
     public void testGetTimespanOneTweet() {
-        
         Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1));
+        
         assertEquals(d1, timespan.getStart());
-
     }
        
             // Checks partitions in: (A2)
     @Test   //tests for a list with two tweets
     public void testGetTimespanTwoTweets() {
-        
         Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet2));
         
         assertEquals(d1, timespan.getStart());
@@ -128,7 +126,6 @@ public class ExtractTest {
             // Checks partitions in: (A3), (B1), (C2)
     @Test   //tests for a list with 4 tweets in an ordered list (all tweets have unique timestamp)
     public void testGetTimespanOrderedList() {
-        
         Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet2, tweet4, tweet5));
         
         assertEquals(d1, timespan.getStart());
@@ -137,7 +134,6 @@ public class ExtractTest {
             // Checks partitions in: (A3), (B2), (C1)
     @Test   //tests for a list with 5 tweets in an unordered list (tweets 2 and 3 have same timestamp)
     public void testGetTimespanUnorderedList() {
-        
         Timespan timespan = Extract.getTimespan(Arrays.asList(tweet4, tweet5, tweet1, tweet3, tweet2));
         
         assertEquals(d1, timespan.getStart());
@@ -147,7 +143,6 @@ public class ExtractTest {
             // Checks partitions in: (A4)
     @Test   //tests for an empty list of tweets
     public void testGetTimespanEmptyList() {
-        
         Timespan timespan = Extract.getTimespan(new ArrayList());
         
         assertEquals(timespan.getEnd(), timespan.getStart());
