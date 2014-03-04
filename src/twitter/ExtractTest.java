@@ -17,9 +17,9 @@ import org.junit.Test;
  * Note: I label all of the partition spaces (i.e. A1, B1, B2, etc) so I can explain which
  * which partition spaces I'm testing above each test method.
  * 
- * For the Extract method, I will be testing:
+ * For the timespan method, I will be testing:
  *      (A) varying sizes of the list of tweets (=1, =2, >2)
- *          (A1) =1, (A2) =2, (A3), >2
+ *          (A1) =1, (A2) =2, (A3) >2, (A4) =0
  *      (B) ordered and unordered (by date) list of tweets
  *          (B1) ordered, (B2) unordered
  *      (C) lists with tweets that have the same time stamp and different time stamps
@@ -144,13 +144,14 @@ public class ExtractTest {
         assertEquals(d5, timespan.getEnd());
     }
     
-//  // Checks partitions in: (A4)
-//@Test   //tests for a list with no tweets
-//public void testGetTimespanNoTweets() {
-//ArrayList emptyArr = new ArrayList();
-//Timespan timespan = Extract.getTimespan(emptyArr);
-//
-//} 
+            // Checks partitions in: (A4)
+    @Test   //tests for an empty list of tweets
+    public void testGetTimespanEmptyList() {
+        
+        Timespan timespan = Extract.getTimespan(new ArrayList());
+        
+        assertEquals(timespan.getEnd(), timespan.getStart());
+    }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //  Tests for GetMentionedUsers Method

@@ -25,6 +25,7 @@ import org.junit.Test;
  *      (B) list of tweets no/one/more than one mentions of others
  *          (B1) no mentions, (B2) one mention, (B3) more than one mention
  *      (C) mentions of other users with varying lower/upper cases
+ *      (D) user mentions him/herself **
  *      
  * For the influencers method, I will be testing:
  *      (A) varying social network sizes (=0, =1, >1)
@@ -34,6 +35,7 @@ import org.junit.Test;
  *      (C) users with the same/varying number of follower
  *          (C1) same (C2) varying
  *      (D) social network with users that have varying lower/upper cases
+ *      (E) user uses @ sign not followed by a user, e-mail address included
  *      
  * For PROBLEM 4, Get Smarter: Uncommon Hashtags
  * Guess/Assumption: An unpopular hashtag (a hashtag used by at most 3 people) is likely used by people who follow each other
@@ -53,6 +55,8 @@ public class SocialNetworkTest {
     private static Tweet tweet3;
     private static Tweet tweet4;
     private static Tweet tweet5;
+    private static Tweet tweet6;
+    private static Tweet tweet7;
     
     @BeforeClass
     public static void setUpBeforeClass() {
@@ -73,13 +77,13 @@ public class SocialNetworkTest {
         calendar.set(2014, 1, 14, 13, 00, 00);
         d5 = calendar.getTime();
 
-        
-        //note: tweets 2 and 3 have the same time stamp
         tweet1 = new Tweet(0, "alyssa", "is it reasonable to talk about rivest so much? #lovemath #MIT", d1);
         tweet2 = new Tweet(1, "bbitdiddle", "rivest talk in 30 minutes #hype #MIT", d2);
         tweet3 = new Tweet(2, "H3LL0", "Hello! #MIT @H3LLO_WORLD2016 @world2016 @alyssa", d3);
         tweet4 = new Tweet(3, "world2016", "text4 #MIT @h3Llo_world2016", d4);
         tweet5 = new Tweet(5, "h3Llo_world2016", "text5 @BBITdiDdle #lovemath", d5);
+        tweet6 = new Tweet(6, "h3Llo_world2016", "following self @h3Llo_world2016 #lovemath", d5);
+        tweet7 = new Tweet(7, "hardworker", "I'm @ the reading room! hello@mit.edu ", d5);
 
     }
     
@@ -92,7 +96,6 @@ public class SocialNetworkTest {
     @Test   // this tests an empty tweet list
     public void testGuessFollowsGraphEmpty() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
-        
         assertTrue(followsGraph.isEmpty());
     }
     
@@ -103,11 +106,11 @@ public class SocialNetworkTest {
         
         assertFalse(followsGraph.isEmpty());
         assertEquals(followsGraph.size(),1);
-        assertTrue(helper.setOfStrToLowerCase(followsGraph.keySet()).contains("h3llo_world2016"));
+        assertTrue(Helper.setOfStrToLowerCase(followsGraph.keySet()).contains("h3llo_world2016"));
         
         Set<String> solns = new HashSet<String>(Arrays.asList("bbitdiddle"));
 
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(solns));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(solns));
         
     }
     
@@ -115,26 +118,35 @@ public class SocialNetworkTest {
     @Test   // this tests a tweet list of size >1, with one and multiple mentions of other users (varying lower/upper cases)
     public void testGuessFollowsGraphMultipleMentions() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(Arrays.asList(tweet1, tweet2, tweet3, tweet4, tweet5));
-        
         assertFalse(followsGraph.isEmpty());
         
         Set<String> keys = new HashSet<String>(Arrays.asList("h3llo_world2016","world2016","h3ll0"));
-        assertTrue(helper.setOfStrToLowerCase(followsGraph.keySet()).containsAll(keys));
+        assertTrue(Helper.setOfStrToLowerCase(followsGraph.keySet()).containsAll(keys));
         
         //checks who "h3llo_world2016" is following
         Set<String> valuesA = new HashSet<String>(Arrays.asList("bbitdiddle"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(valuesA));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(valuesA));
         
         //checks who "world2016" is following
         Set<String> valuesB = new HashSet<String>(Arrays.asList("h3llo_world2016"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("world2016").containsAll(valuesB));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("world2016").containsAll(valuesB));
         
         //checks who "h3llo" is following
         Set<String> valuesC = new HashSet<String>(Arrays.asList("h3llo_world2016", "world2016", "alyssa"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("h3ll0").containsAll(valuesC));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3ll0").containsAll(valuesC));
     }
-    
-    
+            // Checks partitions in (D)
+    @Test   // this tests when a user follows him/herself
+    public void testGuessFollowsUserFollowsSelf() {
+        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(Arrays.asList(tweet6));
+        assertTrue(followsGraph.isEmpty());
+    }
+            //checks partitions in (E)
+    @Test   // this tests when a user uses @ and and e-mail address
+    public void testGuessFollowsUserVariousAtSigns() {
+        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(Arrays.asList(tweet7));
+        assertTrue(followsGraph.isEmpty());
+    }
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //  Tests for influencers Method
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,9 +180,9 @@ public class SocialNetworkTest {
     public void testInfluencersSizeOneAndMultipleFollowers() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
         Set<String> following = new HashSet<String>(Arrays.asList("h3llo_world2016", "world2016", "bbitdiddle"));
-
         followsGraph.put("alyssa", following);
         List<String> influencers = SocialNetwork.influencers(followsGraph);
+        
         assertFalse(influencers.isEmpty());
         assertEquals(influencers.size(), 3);
         assertTrue(influencers.containsAll(following));
@@ -233,8 +245,6 @@ public class SocialNetworkTest {
         
         assertFalse(influencers.isEmpty());
         assertEquals(influencers.size(), 2);
-       
-        //Expected order of list: world2016 (3 followers), h3llo_world2016 (2 followers), bbitdiddle (1 follower)
         assertEquals(influencers.get(0).toLowerCase(), "world2016");
         assertEquals(influencers.get(1).toLowerCase(), "h3llo_world2016");
 

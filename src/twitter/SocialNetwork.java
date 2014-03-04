@@ -42,21 +42,28 @@ public class SocialNetwork {
         Map<String, Set<String>> graph = new HashMap<String, Set<String>>();
         Map<String, Set<String>> graphMentions = new HashMap<String, Set<String>>();
         for(Tweet twt: tweets){
-            Set<String> usersMentioned = new HashSet<String>();
-            usersMentioned =  Extract.getMentionedUsers(Arrays.asList(twt));
+            Set<String> usersMentioned = Extract.getMentionedUsers(Arrays.asList(twt));
+            
             if(usersMentioned.size()>0){
                 String author = twt.getAuthor().toLowerCase();
-                
-                if(graphMentions.containsKey(author)){
-                    for(String user: usersMentioned){
-                        graphMentions.get(author).add(user.toLowerCase());
-                    }
-                }else{
-                    graphMentions.put(author, helper.setOfStrToLowerCase(usersMentioned));
+                if(!(usersMentioned.size()==1 && usersMentioned.contains(author))){ //prevents user from following self if ONLY mentions self
+                    if(graphMentions.containsKey(author)){ 
+                            for(String user: usersMentioned){
+                                if(user != author){//prevents user from following himself/herself
+                                    graphMentions.get(author).add(user.toLowerCase());                            
+                                }
+                            }
+                        }else{
+                            if(usersMentioned.contains(author)){
+                                usersMentioned.remove(author); //prevents user from following himself/herself
+                            }
+                            graphMentions.put(author, Helper.setOfStrToLowerCase(usersMentioned));
+                        }    
                 }
             }
         }
         
+//        return graphMentions;
         //additional code for problem 4: Uncommon hashtags
         Map<String, Set<String>> graphHashTags = guessFollowsUnpopularHashtag(tweets);
         graph = mergeSocialNetworks(graphHashTags, graphMentions);
@@ -78,13 +85,13 @@ public class SocialNetwork {
      * @return a new network combining all the users and who they follow from networkA and networkB
      */
     public static Map<String, Set<String>> mergeSocialNetworks(Map<String, Set<String>> networkA, Map<String, Set<String>> networkB){
-        Map<String, Set<String>> graph = helper.mapOfStrToLowerCase(networkB);
+        Map<String, Set<String>> graph = Helper.mapOfStrToLowerCase(networkB);
         
         for(String user: networkA.keySet()){
             String userLC = user.toLowerCase();
             if(graph.containsKey(userLC)){
                 Set<String> following = graph.get(userLC);
-                for(String follow: helper.setOfStrToLowerCase(networkA.get(user))){
+                for(String follow: Helper.setOfStrToLowerCase(networkA.get(user))){
                     following.add(follow);
                 }
                 graph.put(userLC, following);
@@ -108,10 +115,10 @@ public class SocialNetwork {
     public static Map<String, Set<String>> guessFollowsUnpopularHashtag(List<Tweet> tweets){
         Map<String, Set<String>> graph = new HashMap<String, Set<String>>();
         Map<String, Set<String>> hashtagUsers = getHashtagUsers(tweets);
-        int unpopular = 3;
+        final int UNPOPULAR = 3; //determines that a hastag is unpopular if it is followed by <= 3 people
         
         for(String hashtag: hashtagUsers.keySet()){
-            if(hashtagUsers.get(hashtag).size() <= unpopular){
+            if(hashtagUsers.get(hashtag).size() <= UNPOPULAR){
                 //unpopular hashtag
                 for(String userA: hashtagUsers.get(hashtag)){
                     for(String userB: hashtagUsers.get(hashtag)){
@@ -206,6 +213,7 @@ public class SocialNetwork {
      * 
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
+        
         //This map will keep track of all the users and their corresponding number of followers
         Map<String, Integer> followerCount = new HashMap<String, Integer>();
         
@@ -221,16 +229,28 @@ public class SocialNetwork {
             }
         }
         
-        //Sort followerCount based on the number of followers
-        TreeMap<String, Integer> sortedFollowerCount = new TreeMap<String, Integer>();
-        sortedFollowerCount.putAll(followerCount);
+        //insert info from followerCount into treeMap where the key = the number of followers, and the value = user
+        //(TreeMap will sort everything by the key values)
+        TreeMap<Integer, Set<String>> reverseFollowerCount = new TreeMap<Integer, Set<String>>();        
+        for(String user: followerCount.keySet()){
+            Integer followerNum = followerCount.get(user);
+            if(reverseFollowerCount.containsKey(followerNum)){
+                Set<String> users = reverseFollowerCount.get(followerNum);
+                users.add(user);
+                reverseFollowerCount.put(followerNum, users);
+            }else{
+                Set<String> users = new HashSet<String>(Arrays.asList(user));
+                reverseFollowerCount.put(followerNum, users);                
+            }
+        }
         
         //Add the sorted users into a List
         List<String> influencers = new ArrayList<String>();
-        for(String user: sortedFollowerCount.keySet()){
-            influencers.add(0, user);
+        for(Integer followerNum: reverseFollowerCount.keySet()){
+            for(String user: reverseFollowerCount.get(followerNum)){
+                influencers.add(0, user);
+            }
         }
-
         return influencers;
     }
     

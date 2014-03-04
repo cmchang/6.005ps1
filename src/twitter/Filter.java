@@ -27,9 +27,9 @@ public class Filter {
         List<Tweet> tweetsByUser = new ArrayList<Tweet>();
         
         for (int x = 0; x < tweets.size(); x++){
-            Tweet curTwt = tweets.get(x);
-            if(username.toLowerCase().equals(curTwt.getAuthor().toLowerCase())){
-                tweetsByUser.add(curTwt);
+            Tweet currentTwt = tweets.get(x);
+            if(username.toLowerCase().equals(currentTwt.getAuthor().toLowerCase())){
+                tweetsByUser.add(currentTwt);
             }
         }
         return tweetsByUser;
@@ -50,7 +50,8 @@ public class Filter {
         Date end = timespan.getEnd();
         for(Tweet tweet: tweets){
             // conditional checks start <= timespan <= end
-            if((start.before(tweet.getTimestamp()) || start.equals(tweet.getTimestamp())) && (end.after(tweet.getTimestamp()) || end.equals(tweet.getTimestamp()))){
+            Date twtTime = tweet.getTimestamp();
+            if((start.before(twtTime) || start.equals(twtTime)) && (end.after(twtTime) || end.equals(twtTime))){
                 timespanTwts.add(tweet);
             }
         }
@@ -80,10 +81,10 @@ public class Filter {
                 String textLC = tweet.getText().toLowerCase();
                 String wordLC = word.toLowerCase();
                 
+                //Create copies of the word surrounded by, prefaced with, and followed by a space
                 String wordSpaceBoth = " " + wordLC + " ";
                 String wordSpaceBefore = " " + wordLC;
                 String wordSpaceAfter = wordLC + " ";
-                
                 
                 if (!(textLC.contains(wordSpaceBoth) || textLC.startsWith(wordSpaceAfter) || textLC.endsWith(wordSpaceBefore))){
                     allWordsContained = false;

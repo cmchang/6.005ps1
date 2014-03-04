@@ -5,8 +5,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class helper {
+public class Helper {
 
+    /**
+     * 
+     * @param setOfStr
+     * @return
+     */
     //helper function to take in a set of strings and return a matching set of strings (all lowercase)
     public static Set<String> setOfStrToLowerCase(Set<String> setOfStr){
         Set<String> setOfLower = new HashSet<String>();

@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -82,19 +81,19 @@ public class mySocialNetworkTest {
         assertFalse(followsGraph.isEmpty());
         
         Set<String> keys = new HashSet<String>(Arrays.asList("h3llo_world2016","world2016","h3ll0", "alyssa"));
-        assertTrue(helper.setOfStrToLowerCase(followsGraph.keySet()).containsAll(keys));
+        assertTrue(Helper.setOfStrToLowerCase(followsGraph.keySet()).containsAll(keys));
         
         //checks who "h3llo_world2016" is following
         Set<String> valuesA = new HashSet<String>(Arrays.asList("bbitdiddle", "alyssa"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(valuesA));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(valuesA));
         
         //checks who "world2016" is following
         Set<String> valuesB = new HashSet<String>(Arrays.asList("h3llo_world2016"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("world2016").containsAll(valuesB));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("world2016").containsAll(valuesB));
         
         //checks who "h3llo" is following
         Set<String> valuesC = new HashSet<String>(Arrays.asList("h3llo_world2016", "world2016", "alyssa"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("h3ll0").containsAll(valuesC));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3ll0").containsAll(valuesC));
     }
     
     @Test   // This tests a list of one tweet which contains one hashtag and one mention
@@ -103,11 +102,11 @@ public class mySocialNetworkTest {
         assertFalse(followsGraph.isEmpty());
 
         Set<String> keys = new HashSet<String>(Arrays.asList("h3llo_world2016"));
-        assertTrue(helper.setOfStrToLowerCase(followsGraph.keySet()).containsAll(keys));
+        assertTrue(Helper.setOfStrToLowerCase(followsGraph.keySet()).containsAll(keys));
         
         //checks who "h3llo_world2016" is following
         Set<String> valuesA = new HashSet<String>(Arrays.asList("bbitdiddle"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(valuesA));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(valuesA));
     }
     
     /*
@@ -129,38 +128,38 @@ public class mySocialNetworkTest {
         assertFalse(followsGraph.isEmpty());
         
         Set<String> keys = new HashSet<String>(Arrays.asList("world2016","h3ll0"));
-        assertTrue(helper.setOfStrToLowerCase(followsGraph.keySet()).containsAll(keys));
+        assertTrue(Helper.setOfStrToLowerCase(followsGraph.keySet()).containsAll(keys));
         
         //checks who "world2016" is following
         Set<String> valuesA = new HashSet<String>(Arrays.asList("h3ll0"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("world2016").containsAll(valuesA));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("world2016").containsAll(valuesA));
         
         //checks who "h3llo" is following
         Set<String> valuesB = new HashSet<String>(Arrays.asList("world2016"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("h3ll0").containsAll(valuesB));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3ll0").containsAll(valuesB));
     
     }
     
-    @Test   //Test a hastag shared by only 3 users
+    @Test   //Test a hashtag shared by only 3 users
     public void testGuessFollowsJustHashTagsThree() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsUnpopularHashtag(Arrays.asList(tweet1, tweet2, tweet3));
         
         assertFalse(followsGraph.isEmpty());
         
         Set<String> keys = new HashSet<String>(Arrays.asList("alyssa", "bbitdiddle", "h3ll0"));
-        assertTrue(helper.setOfStrToLowerCase(followsGraph.keySet()).containsAll(keys));
+        assertTrue(Helper.setOfStrToLowerCase(followsGraph.keySet()).containsAll(keys));
         
         //checks who "alyssa" is following
         Set<String> valuesA = new HashSet<String>(Arrays.asList("bbitdiddle", "h3ll0"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("alyssa").containsAll(valuesA));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("alyssa").containsAll(valuesA));
         
         //checks who "bbitdiddle" is following
         Set<String> valuesB = new HashSet<String>(Arrays.asList("alyssa", "h3ll0"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("bbitdiddle").containsAll(valuesB));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("bbitdiddle").containsAll(valuesB));
         
         //checks who "h3llo" is following
         Set<String> valuesC = new HashSet<String>(Arrays.asList("alyssa", "bbitdiddle"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("h3ll0").containsAll(valuesC));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3ll0").containsAll(valuesC));
         
     }
     
@@ -171,15 +170,15 @@ public class mySocialNetworkTest {
         assertFalse(followsGraph.isEmpty());
         
         Set<String> keys = new HashSet<String>(Arrays.asList("h3llo_world2016", "alyssa"));
-        assertTrue(helper.setOfStrToLowerCase(followsGraph.keySet()).containsAll(keys));
+        assertTrue(Helper.setOfStrToLowerCase(followsGraph.keySet()).containsAll(keys));
         
         //checks who "alyssa" is following
         Set<String> valuesA = new HashSet<String>(Arrays.asList("h3llo_world2016"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("alyssa").containsAll(valuesA));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("alyssa").containsAll(valuesA));
         
         //checks who "h3llo_world2016" is following
         Set<String> valuesB = new HashSet<String>(Arrays.asList("alyssa"));
-        assertTrue(helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(valuesB));
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(valuesB));
         
     }
 }
