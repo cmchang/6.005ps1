@@ -103,7 +103,6 @@ public class SocialNetworkTest {
     @Test   // this tests a tweet list of size 1, with one mention of another user
     public void testGuessFollowsGraphOneMention() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(Arrays.asList(tweet5));
-        
         assertFalse(followsGraph.isEmpty());
         assertEquals(followsGraph.size(),1);
         assertTrue(Helper.setOfStrToLowerCase(followsGraph.keySet()).contains("h3llo_world2016"));

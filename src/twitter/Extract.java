@@ -82,10 +82,6 @@ public class Extract {
                     notEmail = false;
                 }
                 
-//                //check if user ends in punctuation - if it does, get rid of it
-//                while(user.endsWith("!")||user.endsWith("?")||user.endsWith(".")){
-//                    user = user.substring(0, user.length()-1);
-//                }
                 boolean nonemptyUser = user.length() > 0;
                 
                 boolean validCharsOnly = true;
