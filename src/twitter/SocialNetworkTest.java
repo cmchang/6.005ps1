@@ -170,39 +170,38 @@ public class SocialNetworkTest {
             // Checks partitions in: (A1)
     @Test   //This tests an empty social network
     public void testInfluencersEmpty() {
-        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
+        Map<String, Set<String>> followsGraph = new HashMap<String, Set<String>>();
         List<String> influencers = SocialNetwork.influencers(followsGraph);
         
         assertTrue(influencers.isEmpty());
-        
     }
     
             // Checks partitions in: (A2), (B2)
     @Test   //This tests a social network of size one, user following one person
     public void testInfluencersSizeOfOneAndOneFollower() {
-        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
+        Map<String, Set<String>> followsGraph = new HashMap<String, Set<String>>();
+        
         Set<String> following = new HashSet<String>(Arrays.asList("h3llo_world2016"));
         followsGraph.put("alyssa", following);
         List<String> influencers = SocialNetwork.influencers(followsGraph);
         
         assertFalse(influencers.isEmpty());
-        assertEquals(influencers.size(), 1);
+        assertTrue(influencers.size() >= 1);
         assertTrue(influencers.contains("h3llo_world2016"));
-        
     }
     
           // Checks partitions in: (A2), (B3)
     @Test //This tests a social network of size one, user following more than one person
     public void testInfluencersSizeOneAndMultipleFollowers() {
-        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
+        Map<String, Set<String>> followsGraph = new HashMap<String, Set<String>>();
+        
         Set<String> following = new HashSet<String>(Arrays.asList("h3llo_world2016", "world2016", "bbitdiddle"));
         followsGraph.put("alyssa", following);
         List<String> influencers = SocialNetwork.influencers(followsGraph);
         
         assertFalse(influencers.isEmpty());
-        assertEquals(influencers.size(), 3);
+        assertTrue(influencers.size() >= 3);
         assertTrue(influencers.containsAll(following));
-        
     }
     
             // Checks partitions in: (A3), (B1)/(B2)/(B3), (C1), (D)
@@ -210,7 +209,8 @@ public class SocialNetworkTest {
             //varying lower/upper cases, users with the same/varying number of followers
             //This also tests if a user is added without following anyone
     public void testInfluencersFollowingSameUser() {
-        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
+        Map<String, Set<String>> followsGraph = new HashMap<String, Set<String>>();
+
         String user1 = new String("alyssa");
         Set<String> following1 = new HashSet<String>(Arrays.asList("h3lLo_world2016", "world2016", "bBitdIDDle"));
 
@@ -231,30 +231,29 @@ public class SocialNetworkTest {
         List<String> influencers = SocialNetwork.influencers(followsGraph);
         
         assertFalse(influencers.isEmpty());
-        assertEquals(influencers.size(), 3);
+        assertTrue(influencers.size() >= 3);
         
         //Expected order of list: world2016 (3 followers), h3llo_world2016 (2 followers), bbitdiddle (1 follower)
-        if(influencers.size() == 3){
+        if(influencers.size() >= 3){
             assertEquals(influencers.get(0).toLowerCase(), "world2016");
             assertEquals(influencers.get(1).toLowerCase(), "h3llo_world2016");
             assertEquals(influencers.get(2).toLowerCase(), "bbitdiddle");
         }else{
             fail(); //influencers does not have the right number of users
         }
-        
     }
     
             // Checks partitions in: (A3), (B2)/(B3), (C1)
     @Test   //This tests a social network of size greater than one, multiple users following the same person
     public void testInfluencersFollowingDifferentUsers() {
-        Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(new ArrayList<Tweet>());
+        Map<String, Set<String>> followsGraph = new HashMap<String, Set<String>>();
         String user1 = new String("alyssa");
         Set<String> following1 = new HashSet<String>(Arrays.asList("world2016"));
 
         String user2 = new String("bbitdiddle");
         Set<String> following2 = new HashSet<String>(Arrays.asList("world2016","h3llo_world2016"));
 
-        String user3 = new String("h3llo_woRld2016");
+        String user3 = new String("h3llo_world2016");
         Set<String> following3 = new HashSet<String>(Arrays.asList("world2016"));
         
         followsGraph.put(user1, following1);
@@ -264,7 +263,8 @@ public class SocialNetworkTest {
         List<String> influencers = SocialNetwork.influencers(followsGraph);
         
         assertFalse(influencers.isEmpty());
-        assertEquals(influencers.size(), 2);
+        assertTrue(influencers.size() <= 4);
+        assertTrue(influencers.size() >=2);
         if(influencers.size() == 2){
             assertEquals(influencers.get(1).toLowerCase(), "h3llo_world2016");
             assertEquals(influencers.get(0).toLowerCase(), "world2016");
