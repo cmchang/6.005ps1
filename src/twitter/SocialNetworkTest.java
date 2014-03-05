@@ -110,11 +110,7 @@ public class SocialNetworkTest {
         
         Set<String> solns = new HashSet<String>(Arrays.asList("bbitdiddle"));
         
-        if(Helper.mapOfStrToLowerCase(followsGraph).containsKey("h3llo_world2016")){
-            assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(solns));
-        }else{
-            fail(); //solution does not contain desired key
-        }
+        assertTrue(Helper.mapOfStrToLowerCase(followsGraph).get("h3llo_world2016").containsAll(solns));
         
     }
     
@@ -265,7 +261,7 @@ public class SocialNetworkTest {
         assertFalse(influencers.isEmpty());
         assertTrue(influencers.size() <= 4);
         assertTrue(influencers.size() >=2);
-        if(influencers.size() == 2){
+        if(influencers.size() >= 2){
             assertEquals(influencers.get(1).toLowerCase(), "h3llo_world2016");
             assertEquals(influencers.get(0).toLowerCase(), "world2016");
         }else{
