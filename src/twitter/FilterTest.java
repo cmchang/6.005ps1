@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,8 +18,8 @@ import org.junit.Test;
  * For the writtenBy method, I will be testing:
  *      (A) tweets made by desired user (none, one, more than one)
  *          (A1) none, (A2) one, (A2) more than one
- *      (B) varying sizes of tweets list (=1, >1)
- *          (B1) =1, (B2) >1
+ *      (B) varying sizes of tweets list (=1, >1, =0)
+ *          (B1) =1, (B2) >1, (B3) =0
  *      (C) varying upper/lowercase letters in the username
  * 
  * For the inTimespan method, I will be testing:
@@ -73,6 +74,16 @@ public class FilterTest {
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //  Tests for writtenBy Method
     ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+            // Checks partition in: (A3)
+    @Test   //Tests an empty list of tweets
+    public void testWrittenByMultipleEmptyListofTweets() {
+        List<Tweet> writtenBy = Filter.writtenBy(new ArrayList<Tweet>(), "idontexist");
+        
+        assertTrue(writtenBy.isEmpty());
+        assertEquals(0, writtenBy.size());
+    }
+    
             // Checks partitions in: (A1), (B1)
     @Test   //None of the tweets are made by the desired user
     public void testWrittenByMultipleNoTweets() {

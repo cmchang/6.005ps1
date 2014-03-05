@@ -145,7 +145,7 @@ public class ExtractTest {
     public void testGetTimespanEmptyList() {
         Timespan timespan = Extract.getTimespan(new ArrayList());
         
-        assertEquals(timespan.getEnd(), timespan.getStart());
+        assertFalse(timespan == null);
     }
     
     ///////////////////////////////////////////////////////////////////////////////////////////////////

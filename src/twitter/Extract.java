@@ -29,7 +29,7 @@ public class Extract {
             start = tweets.get(0).getTimestamp();
             end = tweets.get(0).getTimestamp();
         
-            for(int x = 1; x < tweets.size(); x++){
+            for(int x = 1; x < tweets.size(); x++){//x = 0, already included to initialize start/end
                 Date currentTwt = tweets.get(x).getTimestamp();
                 if(start.after(currentTwt)){
                     start = currentTwt;
