@@ -57,7 +57,6 @@ public class Extract {
      *         set.
      */
     public static String validUsernameChars = "abcdefghijklmnopqrstuvwxyz1234567890_";
-    public static String endPunctuation = ".?!";
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
         Set<String> mentionedUsers = new HashSet<String>();
         
@@ -83,10 +82,10 @@ public class Extract {
                     notEmail = false;
                 }
                 
-                //check if user ends in punctuation - if it does, get rid of it
-                while(user.endsWith("!")||user.endsWith("?")||user.endsWith(".")){
-                    user = user.substring(0, user.length()-1);
-                }
+//                //check if user ends in punctuation - if it does, get rid of it
+//                while(user.endsWith("!")||user.endsWith("?")||user.endsWith(".")){
+//                    user = user.substring(0, user.length()-1);
+//                }
                 boolean nonemptyUser = user.length() > 0;
                 
                 boolean validCharsOnly = true;

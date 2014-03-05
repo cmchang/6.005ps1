@@ -245,13 +245,13 @@ public class ExtractTest {
     @Test   //tests for tweets with a mention that ends with punctuation
     public void testGetMentionedUsersPunctuation() {
         Set<String> mentionedUsers = Extract.getMentionedUsers(Arrays.asList(tweet10));
-        Set<String> expectedAns = new HashSet<String>(Arrays.asList("world"));
+        Set<String> expectedAns = new HashSet<String>(new ArrayList());
         
         Set<String> mentionedUsersLowercase = new HashSet<String>();
         for(String name: mentionedUsers){
             mentionedUsersLowercase.add(name.toLowerCase());
         }
-        assertFalse(mentionedUsers.isEmpty());
+        assertTrue(mentionedUsers.isEmpty());
         assertTrue (mentionedUsersLowercase.containsAll(expectedAns));    
     }    
     

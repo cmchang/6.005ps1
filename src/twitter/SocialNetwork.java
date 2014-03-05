@@ -134,7 +134,6 @@ public class SocialNetwork {
                         }
                     }
                 }
-                
             }
         }
         return graph;
